@@ -2,59 +2,51 @@
 #include "INISAT_GNSS.h"
 
 
-char value_to_char (char a)
-{
-    char r;
-    switch (a) 
-    {
-        case 0 : a = '0';
-            break;
-        case 1 : a = '1';
-            break;
-        case 2 : a = '2';
-            break;
-        case 3 : a = '3';
-            break;
-        case 4 : a = '4';
-            break;
-        case 5 : a = '5';
-            break;
-        case 6 : a = '6';
-            break;
-        case 7 : a = '7';
-            break;
-        case 8 : a = '8';
-            break;
-        case 9 : a = '9';
-            break;
-        case 10 : a = 'A';
-            break;
-        case 11 : a = 'B';
-            break;
-        case 12 : a = 'C';
-            break;
-        case 13 : a = 'D';
-            break;
-        case 14 : a = 'E';
-            break;
-        case 15 : a = 'F';
-            break;
+/// @brief Convert value to the corresponding caracter.
+/// @param a value to convert
+/// @return The corresponding caracter.
+static char value_to_char(char a) {
+    if (a >= 0 && a <= 9) {
+        return '0' + a;
+    } else if (a >= 10 && a <= 15) {
+        return 'A' + (a - 10);
     }
-    r = a;
-    return r;
+    return '\0';
+}
+
+/// @brief Compute checksum for NMEA frame
+/// @param data data in the frame.
+/// @param size Size of frame
+/// @return the value of checksum.
+static uint8_t cs_calculator(uint8_t* data, uint32_t size)
+{
+    uint8_t sum = 0;
+    for (uint32_t i=0;i<size;i++)
+    {   
+        sum ^= data[i];
+    }
+    return sum;
 }
 
 
+
+
+/// @brief Instantiates a new INISAT_GNSS class
 INISAT_GNSS::INISAT_GNSS()
 {
 	NMEA_Buffer[0] = 0;
 }
 
+/// @brief Set I2C interface,
+/// @param i2c I2C interface, must be previously intitialised.
 void INISAT_GNSS::begin(TwoWire *i2c){
 	m_i2c = i2c;
 }
 
-
+/// @brief Read multiple bytes from device.
+/// @param regAddr Address register
+/// @param data  Buffer address to store readed data
+/// @param size Maximum size to read.
 uint32_t INISAT_GNSS::i2cRead(uint8_t regAddr, uint8_t *data, uint32_t size)
 {
 	uint32_t id;
@@ -70,25 +62,22 @@ uint32_t INISAT_GNSS::i2cRead(uint8_t regAddr, uint8_t *data, uint32_t size)
 	return id;
 }
 
-
-
- 
+/// @brief Writes multiple bytes to the device
+/// @param buffer Buffer address where data is stored.
+/// @param size Quantity of bytes to write.
 void INISAT_GNSS::i2cWrite(uint8_t *buffer, unsigned int size)
 {	
 	m_i2c->beginTransmission(uBlox_addr);
     m_i2c->write(buffer, size);
 	m_i2c->endTransmission();
-
 }
 
-/*===========================================================================================================================*/
-/*================================================== Config GNSS ============================================================*/
-/*===========================================================================================================================*/
-
-
-/*
-* Compute checksum and 
-*/
+/// @brief Send nmea frame to device
+/// Put address and value on an nmea frame.
+/// $<address><value>*<checksum>
+/// This method add start'$' and checksum
+/// @param address C-string to write on <address> field.
+/// @param value C-string to write on <value> field
 void INISAT_GNSS::sendNMEAFrame(uint8_t *address, uint8_t *value){
 	NMEA_Buffer[0] = 0;
 	
@@ -106,17 +95,15 @@ void INISAT_GNSS::sendNMEAFrame(uint8_t *address, uint8_t *value){
 	strcat((char*)NMEA_Buffer , "\r\n");
 	
 	i2cWrite(NMEA_Buffer, strlen((const char*)NMEA_Buffer));
-	//Serial.println((char*)NMEA_Buffer);
 	NMEA_Buffer[0] = 0;
 }
 
-
-/*
-Set/Get message rate configuration (s) to/from the receiver.
-• Send rate is relative to the event a message is registered on. For example, if
-the rate of a navigation message is set to 2, the message is sent every second
-navigation solution.
-*/
+/// @brief Set/Get message rate configuration (s) to/from the receiver.
+/// Send rate is relative to the event a message is registered on. For example, if
+/// the rate of a navigation message is set to 2, the message is sent every second
+/// navigation solution.
+/// @param NMEAidentifier C-string event to be received. Ex: "GGA" or "GSA"
+/// @param channel Channel were received Channel where the data will be sent. DDC(I2C), USART1, USART2, USB
 void INISAT_GNSS::setNMEAoutputChannel(uint8_t *NMEAidentifier, ouputChannel channel){
 	uint8_t msg[100] = {0};
 	uint8_t channelEnable[3] = {',', '0', 0};
@@ -138,13 +125,10 @@ void INISAT_GNSS::setNMEAoutputChannel(uint8_t *NMEAidentifier, ouputChannel cha
 	
 	sendNMEAFrame((uint8_t*)"PUBX", msg);
 }
-/*===========================================================================================================================*/
-/*=========================================== get byte number GNSS ==========================================================*/
-/*===========================================================================================================================*/
-/*
-Return number of sta available.
-If there is an error on I2C bus return -1.
-*/
+
+/// @brief Return number of data available from device
+/// @param  
+/// @return Number of data available, return -1 if and I2C error occur.
 int32_t INISAT_GNSS::get_byteNb(void)
 {
 	uint8_t readBuffer[2];
@@ -157,15 +141,10 @@ int32_t INISAT_GNSS::get_byteNb(void)
 	
 }
 
-/*===========================================================================================================================*/
-/*======================================================= get_NMEA ==========================================================*/
-/*===========================================================================================================================*/
-
-/*
-* fill NMEA_Buffer.
-* Return the size of data received.
-* NMEA frame can be slow, we wait while a frame are present until timeout occur.
-*/
+/// @brief Fill NMEA_Buffer with data available from device.
+///        NMEA frame can be slow, we wait while a frame are present until timeout occur.
+/// @param timeOutMs Timeout in milliseconds
+/// @return Return the size of data received.
 int32_t INISAT_GNSS::fill_NMEA_buffer(uint32_t timeOutMs)
 {
 	int32_t sizeAvailable = 0;
@@ -185,7 +164,6 @@ int32_t INISAT_GNSS::fill_NMEA_buffer(uint32_t timeOutMs)
 		sizeAvailable = DATA_BUFFER_SIZE-1;
 	}
 	
-	
 	if(sizeAvailable > 0){
 		uint32_t byteRemaining = (uint32_t)sizeAvailable;
 		uint8_t *buffPtr = NMEA_Buffer;
@@ -201,73 +179,65 @@ int32_t INISAT_GNSS::fill_NMEA_buffer(uint32_t timeOutMs)
 		}
 		NMEA_Buffer[sizeAvailable] = 0;		
 	}
-
-	
 	return sizeAvailable;
 }
 
-/*===========================================================================================================================*/
-/*============================================== checksum calculator GNSS ===================================================*/
-/*===========================================================================================================================*/
-uint8_t INISAT_GNSS::cs_calculator(uint8_t* data, uint32_t size)
-{
-    uint8_t sum = 0;
-    for (uint32_t i=0;i<size;i++)
-    {   
-        sum ^= data[i];
-    }
-    return sum;
-}
-
-
  
-/*
-* Write data of the most coplete GGA frame in outputParser.
-* Return the number of GGA frame.
-*/
+/// @brief  Write data of the most complete GGA frame in outputParser.
+/// @param outputParser pointer of parser structure.
+/// @param readEnable If set to TRUE, NMEA_Buffer will be updated before parsing.
+/// @param timeOutMs Timeout in millisecond if read is enable.
+/// @return Number of frame detected.
 uint32_t INISAT_GNSS::getGGAdata(GxGGA_parser *outputParser, bool readEnable, uint32_t timeOutMs){
 	return getExtractedData(outputParser, GGA, readEnable, timeOutMs);
 }
 
-/*
-* Write data of the most coplete GLL frame in outputParser.
-* Return the number of GLL frame.
-* If readEnable is false, fill_NMEA_buffer() must be caled before.
-*/
+/// @brief  Write data of the most complete GLL frame in outputParser.
+/// @param outputParser pointer of parser structure.
+/// @param readEnable If set to TRUE, NMEA_Buffer will be updated before parsing.
+/// @param timeOutMs Timeout in millisecond if read is enable.
+/// @return Number of frame detected.
 uint32_t INISAT_GNSS::getGLLdata(GxGLL_parser *outputParser, bool readEnable, uint32_t timeOutMs){
 	return getExtractedData(outputParser, GLL, readEnable, timeOutMs);
 }
 
-/*
-* Write data of the most coplete GSA frame in outputParser.
-* Return the number of GSA frame.
-* If readEnable is false, fill_NMEA_buffer() must be caled before.
-*/
+/// @brief  Write data of the most complete GSA frame in outputParser.
+/// @param outputParser pointer of parser structure.
+/// @param readEnable If set to TRUE, NMEA_Buffer will be updated before parsing.
+/// @param timeOutMs Timeout in millisecond if read is enable.
+/// @return Number of frame detected.
 uint32_t INISAT_GNSS::getGSAdata(GxGSA_parser *outputParser, bool readEnable, uint32_t timeOutMs){
 	return getExtractedData(outputParser, GSA, readEnable, timeOutMs);
 }
 
-/*
-* Write data of the most coplete GSV frame in outputParser.
-* Return the number of GSV frame.
-* If readEnable is false, fill_NMEA_buffer() must be caled before.
-*/
+/// @brief  Write data of the most complete GSV frame in outputParser.
+/// @param outputParser pointer of parser structure.
+/// @param readEnable If set to TRUE, NMEA_Buffer will be updated before parsing.
+/// @param timeOutMs Timeout in millisecond if read is enable.
+/// @return Number of frame detected.
 uint32_t INISAT_GNSS::getGSVdata(GxGSV_parser *outputParser, bool readEnable, uint32_t timeOutMs){
 	return getExtractedData(outputParser, GSV, readEnable, timeOutMs);
 }
 
-/*
-* Write data of the most coplete RMC frame in outputParser.
-* Return the number of RMC frame.
-* If readEnable is false, fill_NMEA_buffer() must be caled before.
-*/
+/// @brief  Write data of the most complete RMC frame in outputParser.
+/// @param outputParser pointer of parser structure.
+/// @param readEnable If set to TRUE, NMEA_Buffer will be updated before parsing.
+/// @param timeOutMs Timeout in millisecond if read is enable.
+/// @return Number of frame detected.
 uint32_t INISAT_GNSS::getRMCdata(GxRMC_parser *outputParser, bool readEnable, uint32_t timeOutMs){
 	return getExtractedData(outputParser, RMC, readEnable, timeOutMs);
 }
 
 
-
-
+/// @brief Parse NMEA frame stored in local buffer NMEA_Buffer.
+///		   Parse only frame type according to outputParser type (GxGSV_parser, GxGGA_parser, GxGSA_parser, GxGLL_parser GxRMC_parser).
+/// 	   Parsed date are write in outputParser, only the most complete frame will be write on outputParser.
+/// @tparam T type of parser GxGSV_parser, GxGGA_parser, GxGSA_parser, GxGLL_parser, GxRMC_parser
+/// @param outputParser pointer of parser structure.
+/// @param filter Frame type filter, must match the selected parser. if T = GxGSV_parser filter must be GSV.
+/// @param readEnable if set to TRUE, NMEA_Buffer will be updated before parsing.
+/// @param timeOutMs Timeout in millisecond if read is enable.
+/// @return Number of frame detected.
 template <typename T>
 uint32_t INISAT_GNSS::getExtractedData(T *outputParser, frameFormat filter,  bool readEnable, uint32_t timeOutMs){
 	if(readEnable){
@@ -325,30 +295,38 @@ uint32_t INISAT_GNSS::getExtractedData(T *outputParser, frameFormat filter,  boo
 }
 
 
-/*===========================================================================================================================*/
-/*================================================== NMEA time parser function ==============================================*/
-/*===========================================================================================================================*/
+/// @brief Compute hour from fix
+/// @param fix fix value
+/// @return Hour
 int INISAT_GNSS::calcHour (float fix){
 	return int(fix) / 10000;
 }
 
-int INISAT_GNSS::calcMinut (float fix){
+/// @brief Compute minute from fix
+/// @param fix fix value
+/// @return Minute
+int INISAT_GNSS::calcMinute (float fix){
 	return (int(fix) % 10000) / 100;
 }
+
+/// @brief Compute second from fix
+/// @param fix fix value
+/// @return Second
 int INISAT_GNSS::calcSecond (float fix){
 	return int(fix) % 100;
 }
 
-int INISAT_GNSS::calcLatitude (float NMEA_lat, char ns){
-	int latitude=int(NMEA_lat/100)+(NMEA_lat-int(NMEA_lat/100)*100)/60;
-	if (ns == 'S')
-		latitude *= -1;
-	return latitude;
-}
+/// @brief Compute frame coordinate to GPS coordinate 
+/// @param decimalCoord Coordinate from NMEA frame
+/// @param quadrant Quadrant from NMEA frame ('N', 'S', 'E', 'W')
+/// @return The GPS coordinate
+float INISAT_GNSS::DecimalDegreesToGpsCoordinate (float decimalCoord, char quadrant){
+	
+	int decimalPart = (int)(decimalCoord/100.0f);
+	float floatPart = decimalCoord - (float)(decimalPart)*100.0f;
+	float degree = (float)decimalPart + floatPart/60.0f;
 
-int INISAT_GNSS::calcLongitude (float NMEA_long, char ew){
-	int longitude = int(NMEA_long/100)+(NMEA_long-int(NMEA_long/100)*100)/60;
-	if (ew == 'W')
-		longitude *= -1;
-	return longitude;
+	if (quadrant == 'S' || quadrant == 'W')
+		degree *= -1.0f;
+	return degree;
 }

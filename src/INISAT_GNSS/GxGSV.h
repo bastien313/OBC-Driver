@@ -14,9 +14,12 @@ typedef struct {
 
 class GxGSV_parser
 {
-	enum GxGSV_fieldPosEnum{IDENTIFIER_POS = 0, TOTAL_MESSAGE_POS = 1, MESSAGE_NUMBER_POS = 2, SV_VISIBLE_POS = 3, CHECKSUM_POS = 20};
+	
 							
 	public:
+	
+		enum GxGSV_fieldPosEnum{IDENTIFIER_POS = 0, TOTAL_MESSAGE_POS = 1, MESSAGE_NUMBER_POS = 2, SV_VISIBLE_POS = 3, CHECKSUM_POS = 20};
+		
 		GxGSV_parser();
 		GxGSV_parser(char* data);
 		

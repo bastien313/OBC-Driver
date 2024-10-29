@@ -123,37 +123,29 @@ typedef enum {
 
 class ADS1015
 {
-protected:
-    // Instance-specific properties
-    
-    adsGain_t m_gain;
-    TwoWire*  m_i2c;
-
-
 public:
     ADS1015(); // set i2c adress = 0 to allow ADS1115 to use this as default constructor
     void begin(TwoWire* i2c = &Wire, uint8_t i2cAddress = ADS1015_ADDRESS_GND);
+
 	int16_t  readADC_SingleEnded(uint8_t channel);
     int16_t   readADC_Differential_0_3(void);
     int16_t   readADC_Differential_1_3(void);
-    void      startComparator_SingleEnded(uint8_t channel, int16_t threshold);
-    int16_t   getLastConversionResults();
-    void      setGain(adsGain_t gain);
-    /* Conversion for the ADC */
-    float_t ADC_Conversion(int16_t raw_Vtemp); // raw_Vtemp is the tension measured by the ADC
-    /* Conversion for Thermistors */
-    float_t Thermistor_Conversion(float_t Vtemp); 
-    uint8_t   m_i2cAddress;
-    uint16_t  m_conversionDelay;
-    uint16_t readRegister(uint8_t i2cAddress, uint8_t reg);
-    adsGain_t getGain(void);
-	float getVref(void);
-	bool conversionOnGoing(void);
-	bool waitEndOfConversion(uint32_t timeoutMs = 300);
 
-private:
+    void      setGain(adsGain_t gain);
+    adsGain_t getGain(void);
+
+    float_t ADC_Conversion(int16_t raw_Vtemp); // raw_Vtemp is the tension measured by the ADC
     
+    
+protected:
+    adsGain_t m_gain; // Gain of tdevice
+    TwoWire*  m_i2c; // I2C interface
+    uint8_t   m_i2cAddress; // I2C Device address
+    uint16_t readRegister(uint8_t i2cAddress, uint8_t reg);
+    float getVref(void);
     void writeRegister(uint8_t i2cAddress, uint8_t reg, uint16_t value);
+    bool conversionOnGoing(void);
+	bool waitEndOfConversion(uint32_t timeoutMs = 300);
 };
 
 // Derive from ADS1105 & override construction to set properties

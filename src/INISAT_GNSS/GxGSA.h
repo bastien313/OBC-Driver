@@ -6,10 +6,12 @@
 
 class GxGSA_parser
 {
-	enum GxGSA_fieldPosEnum{IDENTIFIER_POS = 0, MODE_POS = 1, FIX_TYPE_POS = 2, PRN_ID_POS = 3, 
-							PDOP_POS = 15, HDOP_POS = 16, VDOP_POS = 17};
+
 							
 	public:
+		enum GxGSA_fieldPosEnum{IDENTIFIER_POS = 0, MODE_POS = 1, FIX_TYPE_POS = 2, PRN_ID_POS = 3, 
+							PDOP_POS = 15, HDOP_POS = 16, VDOP_POS = 17};
+							
 		GxGSA_parser();
 		GxGSA_parser(char* data);
 		

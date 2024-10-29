@@ -1,12 +1,12 @@
 #######################################
-# Syntax Coloring Map OBC-Driver
+# Syntax Coloring Map OBC_Arduino
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
 
-Servo	KEYWORD1	OBC-Driver
+Servo	KEYWORD1	OBC_Arduino
 
 #######################################
 # Methods and Functions (KEYWORD2)

@@ -6,19 +6,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+/// @brief Instantiates a new INISAT_EPS class
 INISAT_EPS::INISAT_EPS()
 {
 }
-/*===========================================================================================================================*/
-/*======================================================= Init EPS ==========================================================*/
-/*===========================================================================================================================*/
+
+/// @brief Initialise class.
+///        Set I2C interface, I2C address, and initialise device.
+/// @param i2c I2C interface, must be previously intitialised.
+/// @param i2cAddress I2C device Address
 void INISAT_EPS::begin(TwoWire* i2c, uint8_t i2cAddress){
     m_i2c = i2c;
 	charger_addr = i2cAddress;
 	init_ltc();
 }
 
+/// @brief Device initialsiation.
 void  INISAT_EPS::init_ltc(){
 	write_SMBUS(0x14, 0x00, 0x04); //On active la télémétrie même lorsqu'il n'y a pas de chargeur branché
 
@@ -32,9 +35,12 @@ void  INISAT_EPS::init_ltc(){
     write_SMBUS(0x23,0x19, 0xE3); //JEITA_T5
     write_SMBUS(0x24,0x14, 0xDB); //JEITA_T6
 }
-/*===========================================================================================================================*/
-/*=============================================== Charger state display =====================================================*/
-/*===========================================================================================================================*/
+
+/// @brief Return state of the device.
+///        Member charger_state must be updated before call this.
+/// @return 1 = fault, 2 = battery detection, 3 = charger_suspended, 4 = precharge, 5 = cc_cv_charge
+///         6 = ntc_pause, 7 = timer_term, 8 = c over x term, 9 = max charge time fault, 10 = bat missing fault
+///         11 = bat short fault, 0 = unknown
 int INISAT_EPS::charger_state_display()
 {
     int i;
@@ -82,92 +88,14 @@ int INISAT_EPS::charger_state_display()
 }
 
 /*===========================================================================================================================*/
-/*======================================================== Soc Init =========================================================*/
-/*===========================================================================================================================*/
-void INISAT_EPS::soc_init(float voc)
-{
-    // Détermination de l'état de charge SOC au démarrage
-        // Cette approche est précise si la batterie n'est ni en charge ni en décharge
-        // Source: https://arxiv.org/ftp/arxiv/papers/1803/1803.10654.pdf
-        // Remarque: les valeurs prises sont celles données dans le papier, il pourrait être interessant de les adapter à notre batterie.
-        float A,B;
-        if (voc>4.039){
-            A=90.61;
-            B=274.7;
-        }
-        else if (voc>3.967){
-            A=104.8;
-            B=332;
-        }
-        else if (voc>3.739){
-            A=111.9;
-            B=359.9;
-        }
-        else if (voc>3.676){
-            A=229.5;
-            B=800.9;
-        }
-        else if (voc>3.595){
-            A=334;
-            B=1225;
-        }
-        else if (voc>3.508){
-            A=149;
-            B=516.1;
-        }
-        else if (voc>3.452){
-            A=125;
-            B=431.1;
-        }
-        else if (voc>3.3){
-            A=26.55;
-            B=88.6;
-        }
-        else{
-            //printf("La tension voc est trop basse pour estimer le SOC, recharger la batterie.\n");
-            A=0;
-            B=0;
-            }
-        soc=A*voc-B;
-}
-
-/*===========================================================================================================================*/
-/*======================================================== Calcul soc =======================================================*/
-/*===========================================================================================================================*/
-void INISAT_EPS::calcul_soc()
-{
-   // Calcul de l'état de charge SOC
-        // Il s'agit d'un compteur de Coulomb prenant en compte l'impact de la température sur la capacité de la batterie
-        // Source: https://arxiv.org/ftp/arxiv/papers/1803/1803.10654.pdf
-        
-        float alpha;
-        float delta_t=periode_lecture/3600; //en heures
-        
-        if (temperature<-10){
-            alpha=0.5;
-            }
-        else if (temperature<5){
-            alpha=0.6;
-            }
-        else if (temperature<25){
-            alpha=0.8;
-            }
-        else if (temperature<45){
-            alpha=1;
-            }
-        else{
-            alpha=0.9;
-            }
-        if (charger_state==16){ //Si la charge est terminée (timer_term)
-            soc=100; //on recalibre le SOC
-            }
-        else{
-            soc=soc+(100*ibat*delta_t)/(Qrated*alpha); //ibat positif en charge, négatif en décharge
-            }
-}
-/*===========================================================================================================================*/
 /*========================================================== Write SMBUS ====================================================*/
 /*===========================================================================================================================*/
+
+
+/// @brief Writes 16-bits to the specified destination register
+/// @param addr Address register
+/// @param MSB 8 Most Significant Bit
+/// @param LSB 8 Least  Significant Bit
 void INISAT_EPS::write_SMBUS(int addr, int MSB, int LSB)
 {   
     // Accès en écriture à un registre (16 bits) du LTC4162-L
@@ -179,9 +107,9 @@ void INISAT_EPS::write_SMBUS(int addr, int MSB, int LSB)
 	m_i2c->write(cmd, 3);
 	m_i2c->endTransmission();
 }
-/*===========================================================================================================================*/
-/*========================================================= Read SMBUS ======================================================*/
-/*===========================================================================================================================*/
+
+/// @brief Read 16-bits from the specified destination register
+/// @param addr Address register
 int INISAT_EPS::read_SMBUS(int addr)
 {
     // Accès en lecture à un registre (16 bits) du LTC4162-L    
@@ -196,52 +124,35 @@ int INISAT_EPS::read_SMBUS(int addr)
     return 0;
 }
 
-void INISAT_EPS::test(){
-	vin = read_SMBUS(0x3B)*1.649e-3;
-}
-/*===========================================================================================================================*/
-/*========================================================== get EPS ========================================================*/
-/*===========================================================================================================================*/
+
+/// @brief Reads all relevant data from the device and stores them in the following members.
+///         charger_state, vin, vout, ibat, iin, die_temp, temperature, csd
 void INISAT_EPS::get()
 {
-    //printf("BATTERY MANAGEMENT MONITOR\n");
-    
+    int16_t thermistor_voltage;
     // Configuration au démarrage
     init_ltc();
-    
-    //read_SMBUS(0x3A)*192.4E-6; //Mesure tension des batteries au demarrage
-    soc_init(voc); //Calcul de l'état de charge au démarrage
 
+    //Lecture et calcul de la télémétrie
+    charger_state = read_SMBUS(0x34);
+    vbat = read_SMBUS(0x3A)*192.4e-6;
+    vin = read_SMBUS(0x3B)*1.649e-3;
+    vout = read_SMBUS(0x3C)*1.653e-3;
+    ibat = read_SMBUS(0x3D)*1.466e-6/RSNSB;
+    iin = read_SMBUS(0x3E)*1.466e-6/RSNSI;
+    die_temp = read_SMBUS(0x3F)*0.0215-264.4;
     
+    //Calcul NTC (température batterie)
+    thermistor_voltage=read_SMBUS(0x40);
+    float Rntc = 10000.*thermistor_voltage/(21829-thermistor_voltage);
+    float Tinv= 3.354e-3+log(Rntc/10000)/beta;
+    temperature=1/Tinv-273.15;
+            
+    csd = charger_state_display();
 
-        //Lecture et calcul de la télémétrie
-        charger_state = read_SMBUS(0x34);
-        config_bit_reg = read_SMBUS(0x14);
-        vbat = read_SMBUS(0x3A)*192.4e-6;
-        vin = read_SMBUS(0x3B)*1.649e-3;
-        vout = read_SMBUS(0x3C)*1.653e-3;
-        ibat = read_SMBUS(0x3D)*1.466e-6/RSNSB;
-        iin = read_SMBUS(0x3E)*1.466e-6/RSNSI;
-        die_temp = read_SMBUS(0x3F)*0.0215-264.4;
-        
-        //Calcul NTC (température batterie)
-        thermistor_voltage=read_SMBUS(0x40);
-        float Rntc = 10000.*thermistor_voltage/(21829-thermistor_voltage);
-        float Tinv= 3.354e-3+log(Rntc/10000)/beta;
-        temperature=1/Tinv-273.15;
-                
-        // Mise à jour du SOC
-        calcul_soc();
-        csd = charger_state_display();
-        // Si une alimentation est branchée, charger_state passe de 256 à une autre valeur
-        // Lorsque c'est le cas, il faut reécrire les registres de configuration
-        if (previous_charger_state==256 && charger_state!=256){
-            init_ltc();
-            }
-        previous_charger_state=charger_state;
-        /*string B = "B" + to_string(vbat) + "#" + to_string(vin) + "#" + to_string(vout) +  "#" + to_string(ibat) +  "#" + to_string(iin) +  "#" + to_string(temperature) +  "#" + to_string(csd) + "@";
-        //printf("B%.3f#%.3f#%.3f#%.3f#%.3f#%.3f#%d@",vbat,vin,vout,ibat,iin,temperature,csd);
-        COMM.write(B.c_str(),strlen(B.c_str()));*/
-        //thread_sleep_for(10 * periode_lecture);
+    if (previous_charger_state==256 && charger_state!=256){
+        init_ltc();
+        }
+    previous_charger_state=charger_state;
 }
 

@@ -97,38 +97,38 @@ void loop() {
 }
 
 void EPS_dataOut(void){
-        char strFloat[20];
-        OBC.EPS.get();
+  char strFloat[20];
+  OBC.EPS.get();
 
-        OBC.writeCom("B");
-        dtostrf(OBC.EPS.vbat, 7, 3, strFloat);
-        OBC.writeCom(strFloat);
+  OBC.writeCom("B");
+  dtostrf(OBC.EPS.vbat, 7, 3, strFloat);
+  OBC.writeCom(strFloat);
 
-        OBC.writeCom("#");
-        dtostrf(OBC.EPS.vin, 7, 3, strFloat);
-        OBC.writeCom(strFloat);
+  OBC.writeCom("#");
+  dtostrf(OBC.EPS.vin, 7, 3, strFloat);
+  OBC.writeCom(strFloat);
 
-        OBC.writeCom("#");
-        dtostrf(OBC.EPS.vout, 7, 3, strFloat);
-        OBC.writeCom(strFloat);
+  OBC.writeCom("#");
+  dtostrf(OBC.EPS.vout, 7, 3, strFloat);
+  OBC.writeCom(strFloat);
 
-        OBC.writeCom("#");
-        dtostrf(OBC.EPS.ibat, 7, 3, strFloat);
-        OBC.writeCom(strFloat);
+  OBC.writeCom("#");
+  dtostrf(OBC.EPS.ibat, 7, 3, strFloat);
+  OBC.writeCom(strFloat);
 
-        OBC.writeCom("#");
-        dtostrf(OBC.EPS.iin, 7, 3, strFloat);
-        OBC.writeCom(strFloat);
+  OBC.writeCom("#");
+  dtostrf(OBC.EPS.iin, 7, 3, strFloat);
+  OBC.writeCom(strFloat);
 
-        OBC.writeCom("#");
-        dtostrf(OBC.EPS.temperature, 7, 3, strFloat);
-        OBC.writeCom(strFloat);
+  OBC.writeCom("#");
+  dtostrf(OBC.EPS.temperature, 7, 3, strFloat);
+  OBC.writeCom(strFloat);
 
-        OBC.writeCom("#");
-        dtostrf(OBC.EPS.csd, 7, 3, strFloat);
-        OBC.writeCom(strFloat);
+  OBC.writeCom("#");
+  dtostrf(OBC.EPS.csd, 7, 3, strFloat);
+  OBC.writeCom(strFloat);
 
-        OBC.writeCom("@");
+  OBC.writeCom("@");
 }
 
 void MLP_altitude(void){
@@ -329,6 +329,36 @@ void NMEA_bufferWrite(void){
   }
 }
 
+
+void sendNMEAData(int hTime, int mTime, int sTime, float latitude, char ns, float longitude, char ew, int satNumber){
+  char bufferOut[50];
+  OBC.writeCom("N");
+
+  sprintf(bufferOut, "%02d:%02d:%02d", hTime, mTime, sTime);
+  OBC.writeCom(bufferOut);
+
+  OBC.writeCom("#");
+  dtostrf(latitude, 1, 3, bufferOut);
+  OBC.writeCom(bufferOut);
+  OBC.writeCom((char*)&ns,1);
+
+  OBC.writeCom("#");
+  dtostrf(longitude, 1, 3, bufferOut);
+  OBC.writeCom(bufferOut);
+  OBC.writeCom((char*)&ew,1);
+
+  OBC.writeCom("#");
+  if(satNumber){
+    sprintf(bufferOut, "%d",satNumber);
+    OBC.writeCom(bufferOut);
+  }else{
+    OBC.writeCom("/");
+  }
+
+  OBC.writeCom("@");
+
+}
+
 void NEMA_dataWrite(void){
   char bufferOut[256];
   OBC.GNSS.fill_NMEA_buffer();
@@ -340,43 +370,44 @@ void NEMA_dataWrite(void){
 
   //Serial.print((char*)OBC.GNSS.NMEA_Buffer);
 
-  int hTime, mTime, sTime, latitude, longitude;
+  int hTime, mTime, sTime;
+  float latitude, longitude;
   GxGGA_parser GGA;
   if(OBC.GNSS.getGGAdata(&GGA, false)){
-      latitude = INISAT_GNSS::calcLatitude(GGA.latitude, GGA.ns);
-      longitude = INISAT_GNSS::calcLongitude(GGA.longitude, GGA.ew);
-      hTime = INISAT_GNSS::calcHour(GGA.fix);
-      mTime = INISAT_GNSS::calcMinut(GGA.fix);
-      sTime = INISAT_GNSS::calcSecond(GGA.fix);
+    latitude = INISAT_GNSS::DecimalDegreesToGpsCoordinate(GGA.latitude, GGA.ns);
+    longitude = INISAT_GNSS::DecimalDegreesToGpsCoordinate(GGA.longitude, GGA.ew);
+    hTime = INISAT_GNSS::calcHour(GGA.fix);
+    mTime = INISAT_GNSS::calcMinut(GGA.fix);
+    sTime = INISAT_GNSS::calcSecond(GGA.fix);
 
-      //GGA.debugPrint();
+    //GGA.debugPrint();
 
-      if(latitude != 0 && longitude != 0){ // Data is valid
-        sprintf(bufferOut, "N%02d:%02d:%02d#%d%c#%d%c#%d@", hTime, mTime, sTime, latitude, GGA.ns, longitude, GGA.ew, GGA.satNumber);
-        OBC.writeCom(bufferOut);
-        return; // data valid we skip
-      }
+    if(GGA.filedIsPresent(GxGGA_parser::LATITUDE_POS) && GGA.filedIsPresent(GxGGA_parser::LONGITUDE_POS)){ // Data is valid
+      sendNMEAData(hTime, mTime, sTime, latitude, GGA.ns, longitude, GGA.ew, GGA.satNumber);
+      return; // data valid we skip
+    }
   }
 
   GxGLL_parser GLL;
   if(OBC.GNSS.getGLLdata(&GLL, false)){
-    latitude = INISAT_GNSS::calcLatitude(GLL.latitude, GLL.ns);
-    longitude = INISAT_GNSS::calcLongitude(GLL.longitude, GLL.ew);
+    latitude = INISAT_GNSS::gpsToDecimalDegrees(GLL.latitude, GLL.ns);
+    longitude = INISAT_GNSS::gpsToDecimalDegrees(GLL.longitude, GLL.ew);
     hTime = INISAT_GNSS::calcHour(GLL.fix);
     mTime = INISAT_GNSS::calcMinut(GLL.fix);
     sTime = INISAT_GNSS::calcSecond(GLL.fix);
 
     //GLL.debugPrint();
 
-    if(latitude != 0 && longitude != 0){ // Data is valid
-      sprintf(bufferOut, "N%02d:%02d:%02d#%d%c#%d%c#%c@", hTime, mTime, sTime, latitude, GLL.ns, longitude, GLL.ew, '/');
-      OBC.writeCom(bufferOut);
+    if(GLL.filedIsPresent(GxGLL_parser::LATITUDE_POS) && GLL.filedIsPresent(GxGLL_parser::LONGITUDE_POS)){ // Data is valid
+      sendNMEAData(hTime, mTime, sTime, latitude, GLL.ns, longitude, GLL.ew, 0);
       return; // data valid we skip
     }
   }
   // No good data available
   OBC.writeCom("PNo data@");
 }
+
+
 
 void temperature(void){
   char strFloat[20];

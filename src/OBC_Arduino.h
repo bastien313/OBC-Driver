@@ -1,5 +1,5 @@
-#ifndef OBC_DRIVER_H_
-#define OBC_DRIVER_H_
+#ifndef OBC_ARDUINO_H_
+#define OBC_ARDUINO_H_
 
 #include <Wire.h>
 #include <Arduino.h>
@@ -13,10 +13,21 @@
 #define RST_BNO_GPIO (2)
 #define SD_CS_GPIO (10)
 
-class OBC_Driver
+/// @brief This class is the high-level entry point of the library.
+///Its purpose is to:
+///    - Perform the correct initialization of the entire 2U system.
+///    - Simplify the management of analog converters (ADS1115).
+///    - Simplify communication with the COM board.
+///    - Provide access to auxiliary libraries through the following members:
+///       - EPS, Step-Down Battery Charger.
+///       - BNO, Inertial Measurement Unit.
+///       - MPL, pressure sensor with altimetry.
+///       - GNSS, GPS Galileo GLONASS BeiDou.
+///       - SDCARD.
+class OBC_Arduino
 {
 	public:
-		OBC_Driver();
+		OBC_Arduino();
 		void begin(TwoWire* i2cInterface = &Wire, UART* serial = &Serial1); // Initialisaton.
 		
 		//ADC functions
@@ -26,12 +37,11 @@ class OBC_Driver
 		float YN_readVolatge(void);
 		float Z_readVolatge(void);
 		float thermistor_readVolatge(uint8_t channel);
-		
 		static float thermistor_voltageConversion(float Vtemp);
 		
 		//COM function
 		uint32_t readCom(char *buff, uint32_t size);
-		uint32_t writeCom(char *str);
+		void writeCom(char *str);
 		void writeCom(char *buff, uint32_t len);
 		
 		//Additional library interface.
@@ -48,7 +58,6 @@ class OBC_Driver
 		ADS1115 m_sloarADC_Z;
 		//Extern ADC on sensor board.
 		ADS1115 m_thermistorADC;	
-		
 		void hardwareReset_BNO(bool);
 		UART *m_serial;
 };

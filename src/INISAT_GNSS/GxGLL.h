@@ -6,10 +6,12 @@
 
 class GxGLL_parser
 {
-	enum GxGLL_fieldPosEnum{IDENTIFIER_POS = 0, LATITUDE_POS = 1, LATITUDE_NS_POS = 2, LONGITUDE_POS = 3,
-							LONGITUDE_EW_POS = 4, FIX_POS = 5, STATUS_INDICATOR = 6, MODE_INDICATOR = 7};
+
 							
 	public:
+	
+		enum GxGLL_fieldPosEnum{IDENTIFIER_POS = 0, LATITUDE_POS = 1, LATITUDE_NS_POS = 2, LONGITUDE_POS = 3,
+							LONGITUDE_EW_POS = 4, FIX_POS = 5, STATUS_INDICATOR = 6, MODE_INDICATOR = 7};
 		GxGLL_parser();
 		GxGLL_parser(char* data);
 		

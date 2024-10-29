@@ -1,11 +1,17 @@
-#include <OBC_Driver.h>
+#include <OBC_Arduino.h>
 #include <Wire.h>
 
-OBC_Driver::OBC_Driver(){
+/// @brief Instantiates a new OBC_Arduino class
+OBC_Arduino::OBC_Arduino(){
 
 }
 
-void OBC_Driver::begin(TwoWire* i2cInterface, UART* serial){
+/// @brief Initializes the entire system.
+///		   GPIO, I2C, UART. 
+///		   ADS1115 x3(Solar_XY, Solar_Z, Thermistor), BNO055, NEO-M8N, MPL3115A2, LTC4162.
+/// @param i2cInterface I2C Interface.
+/// @param serial UART Interface
+void OBC_Arduino::begin(TwoWire* i2cInterface, UART* serial){
 	//GPIO
 	pinMode(RST_BNO_GPIO, OUTPUT); //Reset BNO
 	
@@ -43,45 +49,60 @@ void OBC_Driver::begin(TwoWire* i2cInterface, UART* serial){
 	GNSS.setNMEAoutputChannel((uint8_t*)"GSV", INISAT_GNSS::DDC);
 	GNSS.setNMEAoutputChannel((uint8_t*)"GSA", INISAT_GNSS::DDC);
 	
+	//UART
 	m_serial = serial;
 	m_serial->begin(115200);
 }
 
-float OBC_Driver::XP_readVolatge(void){
+/// @brief Read Solar X+ voltage.
+/// @param  
+/// @return Solar X+ voltage.
+float OBC_Arduino::XP_readVolatge(void){
 	return m_sloarADC_XY.ADC_Conversion(m_sloarADC_XY.readADC_SingleEnded((uint8_t)0));
 }
 
-float OBC_Driver::XN_readVolatge(void){
+/// @brief Read Solar X- voltage.
+/// @param  
+/// @return Solar X- voltage.
+float OBC_Arduino::XN_readVolatge(void){
 	return m_sloarADC_XY.ADC_Conversion(m_sloarADC_XY.readADC_SingleEnded((uint8_t)1));
 }
 
-float OBC_Driver::YP_readVolatge(void){
+/// @brief Read Solar Y+ voltage.
+/// @param  
+/// @return Solar Y+ voltage.
+float OBC_Arduino::YP_readVolatge(void){
 	return m_sloarADC_XY.ADC_Conversion(m_sloarADC_XY.readADC_SingleEnded((uint8_t)2));
 }
 
-float OBC_Driver::YN_readVolatge(void){
+/// @brief Read Solar Y- voltage.
+/// @param  
+/// @return Solar Y- voltage.
+float OBC_Arduino::YN_readVolatge(void){
 	return m_sloarADC_XY.ADC_Conversion(m_sloarADC_XY.readADC_SingleEnded((uint8_t)3));
 }
 
-float OBC_Driver::Z_readVolatge(void){
+/// @brief Read Solar Z+ voltage.
+/// @param  
+/// @return Solar Z+ voltage.
+float OBC_Arduino::Z_readVolatge(void){
 	return m_sloarADC_Z.ADC_Conversion(m_sloarADC_Z.readADC_SingleEnded((uint8_t)0));
 }
 
-float OBC_Driver::thermistor_readVolatge(uint8_t channel){
+/// @brief Read selected thermistor voltage
+/// @param  channel Desired channel
+/// @return Selected thermistor voltage
+float OBC_Arduino::thermistor_readVolatge(uint8_t channel){
 	return m_thermistorADC.ADC_Conversion(m_thermistorADC.readADC_SingleEnded(channel));
 }
 
-
-
-/*********************************************************************************/
-/*!
-    @brief  Conversion function based on Steinhart-Hart Law.
-            Coefficients must be changed to match the component used, the bias tension and resistor. 
-            Currently on B57861S103F40, 5V, 10kOhms resistor.
-*/
-/*********************************************************************************/
-
-float OBC_Driver::thermistor_voltageConversion(float Vtemp)
+/// @brief Convert voltage to temperature in °C
+///		   Conversion function based on Steinhart-Hart Law.
+///        Coefficients must be changed to match the component used, the bias tension and resistor. 
+///        Currently on B57861S103F40, 5V, 10kOhms resistor.
+/// @param Vtemp Theristor voltage
+/// @return Temperature in °C
+float OBC_Arduino::thermistor_voltageConversion(float Vtemp)
 {
 	/* Parameters (!!! need to be updated if changements in the circuit) */
 	float_t Vbias = 5.0;  // Biasing Tension ! unaccurate
@@ -101,7 +122,9 @@ float OBC_Driver::thermistor_voltageConversion(float Vtemp)
     return Thermistor_T;
 }
 
-void OBC_Driver::hardwareReset_BNO(bool state){
+/// @brief Drive the RST GPIO pin of BNO055
+/// @param state State of the reset, TRUE = device in reset mode, FALSE = device un run mode.
+void OBC_Arduino::hardwareReset_BNO(bool state){
 	if(state){
 		digitalWrite(RST_BNO_GPIO, LOW);  
 	}else{
@@ -109,11 +132,12 @@ void OBC_Driver::hardwareReset_BNO(bool state){
 	}
 }
 
-/*
-* Read x byte from serial port(connected to COM board).
-* Return amount of byte readed.
-*/
-uint32_t OBC_Driver::readCom(char *buff, uint32_t size){
+/// @brief Read x byte from UART(connected to COM board).
+///        Unblocking method, if ther is no more data to reed return immediatly.
+/// @param buff Buffer address to store readed data
+/// @param size Maximum size to read.
+/// @return Return amount of byte readed.
+uint32_t OBC_Arduino::readCom(char *buff, uint32_t size){
 	uint32_t dataReaded = 0;
 	for(uint32_t i = 0; i<size; i++){
 		if(m_serial->available() > 0){
@@ -127,17 +151,16 @@ uint32_t OBC_Driver::readCom(char *buff, uint32_t size){
 	return dataReaded;
 }
 
-/*
-* Write x byte from serial port(connected to COM board).
-*/
-uint32_t OBC_Driver::writeCom(char *str){
+/// @brief Write a C-string to UART (connected to COM board).
+/// @param str C-string to write
+void OBC_Arduino::writeCom(char *str){
 	writeCom(str, strlen(str));
 }
 
-/*
-* Write x byte from serial port(connected to COM board).
-*/
-void OBC_Driver::writeCom(char *buff, uint32_t len){
+/// @brief Write x byte to UART (connected to COM board).
+/// @param buff Buffer address where data is stored.
+/// @param len Quantity of bytes to write.
+void OBC_Arduino::writeCom(char *buff, uint32_t len){
 	for(uint32_t i = 0; i<len; i++){
 		m_serial->write(*buff);
 		*buff++;

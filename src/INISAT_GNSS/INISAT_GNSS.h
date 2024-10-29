@@ -10,7 +10,7 @@
 
 #define DATA_BUFFER_SIZE (2048)
 
-/** Class for operating GNSS over I2C **/
+/// @brief Class for operating GNSS over I2C 
 class INISAT_GNSS 
 { 
 public:
@@ -20,23 +20,19 @@ public:
 	
     INISAT_GNSS();
 	void begin(TwoWire *i2c);
-/*==================================================== Config GNSS ======================================================*/
 	void setNMEAoutputChannel(uint8_t *NMEAidentifier, ouputChannel channel);
-/*===================================================== get NMEA GNSS ===================================================*/
+
 	int32_t fill_NMEA_buffer(uint32_t timeOutMs = 1100);
-/*================================================= NMEA parser function ================================================*/
 	uint32_t getGGAdata(GxGGA_parser *outputParser, bool readEnable=true, uint32_t timeOutMs = 1100);
 	uint32_t getGLLdata(GxGLL_parser *outputParser, bool readEnable=true, uint32_t timeOutMs = 1100);
 	uint32_t getGSAdata(GxGSA_parser *outputParser, bool readEnable=true, uint32_t timeOutMs = 1100);
 	uint32_t getGSVdata(GxGSV_parser *outputParser, bool readEnable=true, uint32_t timeOutMs = 1100);
 	uint32_t getRMCdata(GxRMC_parser *outputParser, bool readEnable=true, uint32_t timeOutMs = 1100);
-/*=============================================== NMEA time parser function =============================================*/
+
 	static int calcHour(float fix);
 	static int calcMinut (float fix);
 	static int calcSecond (float fix);
-/*============================================= Lat/Long converter GNSS =================================================*/
-	static int calcLatitude (float NMEA_lat, char ns);
-	static int calcLongitude (float NMEA_long, char ew);
+	static float DecimalDegreesToGpsCoordinate (float decimalCoord, char quadrant);
 	
 	uint8_t NMEA_Buffer[DATA_BUFFER_SIZE];
       
@@ -51,12 +47,9 @@ private:
 	
 	int32_t get_byteNb(void);
 	void sendNMEAFrame(uint8_t *address, uint8_t *value);
-	uint8_t cs_calculator(uint8_t* data, uint32_t size);
-	void parseLine(char *line);
-	
+
 	template <typename T>
 	uint32_t getExtractedData(T *outputParser, frameFormat filter, bool readEnable, uint32_t timeOutMs);
-
 };
 
 

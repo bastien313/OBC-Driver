@@ -176,82 +176,64 @@ typedef struct chip{
     char serial[16];
     }chip;
 
-/** Class for operating Bosch BNO055 sensor over I2C **/
+/// @brief Class for operating Bosch BNO055 sensor over I2C
 class BNO055 
 { 
 public: 
 
-/** Create BNO055 instance **/
     BNO055(); 
     void begin(TwoWire*  i2c);
-/** Perform a power-on reset of the BNO055 **/
+
     void reset();
-/** Check that the BNO055 is connected and download the software details 
-and serial number of chip and store in ID structure **/
     bool check();
-/** Turn the external timing crystal on/off **/
-    void SetExternalCrystal(bool yn);
-/** Set the operation mode of the sensor **/    
+    void SetExternalCrystal(bool yn);    
     void setmode(char mode);
-/** Set the power mode of the sensor **/
     void setpowermode(char mode);
     
-/** Set the output units from the accelerometer, either MPERSPERS or MILLIG **/
     void set_accel_units(char units);
-/** Set the output units from the gyroscope, either DEG_PER_SEC or RAD_PER_SEC **/
     void set_anglerate_units(char units);
-/** Set the output units from the IMU, either DEGREES or RADIANS **/
     void set_angle_units(char units);
-/** Set the output units from the temperature sensor, either CENTIGRADE or FAHRENHEIT **/
     void set_temp_units(char units);
-/** Set the data output format to either WINDOWS or ANDROID **/    
     void set_orientation(char units);
-/** Set the mapping of the exes/directions as per page 25 of datasheet
-    range 0-7, any value outside this will set the orientation to P1 (default at power up) **/
+
     void set_mapping(char orient);
     
-/** Get the current values from the accelerometer **/
     void get_accel(void);
-/** Get the current values from the gyroscope **/
     void get_gyro(void);
-/** Get the current values from the magnetometer **/
     void get_mag(void);
-/** Get the corrected linear acceleration **/
     void get_lia(void);
-/** Get the current gravity vector **/
     void get_grv(void);
-/** Get the output quaternion **/
     void get_quat(void);
-/** Get the current Euler angles **/
     void get_angles(void);
-/** Get the current temperature **/
     void get_temp(void);
 
-/** Read the calibration status register and store the result in the calib variable **/
     void get_calib(void);
-/** Read the offset and radius values into the calibration array**/
     void read_calibration_data(void);
-/** Write the contents of the calibration array into the registers **/    
     void write_calibration_data(void);
     
-/** Structures containing 3-axis data for acceleration, rate of turn and magnetic field.
-    x,y,z are the scale floating point values and
-    rawx, rawy, rawz are the int16_t values read from the sensors **/
+
+    /// @brief Structures containing 3-axis data for acceleration, rate of turn and magnetic field.
+    ///x,y,z are the scale floating point values and
+    ///rawx, rawy, rawz are the int16_t values read from the sensors
     values accel,gyro,mag,lia,gravity;
-/** Stucture containing the Euler angles as yaw, pitch, roll as scaled floating point
-    and rawyaw, rawroll & rollpitch as the int16_t values loaded from the registers **/
+
+    /// @brief Stucture containing the Euler angles as yaw, pitch, roll as scaled floating point
+    ///and rawyaw, rawroll & rollpitch as the int16_t values loaded from the registers
     angles euler;
-/** Quaternion values as w,x,y,z (scaled floating point) and raww etc... as int16_t loaded from the
-    registers **/    
+
+    /// @brief Quaternion values as w,x,y,z (scaled floating point) and raww etc... as int16_t loaded from the registers
     quaternion quat;
 
-/** Current contents of calibration status register **/
+    /// @brief Current contents of calibration status register
     char calib;
-/** Contents of the 22 registers containing offset and radius values used as calibration by the sensor **/
+
+    /// @brief Contents of the 22 registers containing offset and radius values used as calibration by the sensor
     char calibration[22];
-/** Structure containing sensor numbers, software version and chip UID **/
+
+    /// @brief Structure containing sensor numbers, software version and chip UID
     chip ID;
-/** Current temperature **/
+
+    /// @brief Current temperature
     int temperature;
     
 private:
@@ -267,21 +249,6 @@ private:
 	char pwr_mode;
 	float accel_scale,rate_scale,angle_scale;
 	int temp_scale;
-/*
-void readchar(char location){
-    tx[0] = location;
-    _i2c.write(address,tx,1,true);
-    _i2c.read(address,&rx,1,false);
-}
 
-void writechar(char location, char value){
-    tx[0] = location;
-    tx[1] = value;
-    _i2c.write(address,tx,2);
-}
-
-void setpage(char value){
-    writechar(BNO055_PAGE_ID_ADDR,value);
-}*/
-    };
+};
 #endif
