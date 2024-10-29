@@ -4,11 +4,10 @@
 
 #define GGA_FIELD_NUMBER (16)
 
+/// @brief GGA frame parser class.
 class GxGGA_parser
 {
-
 	public:
-	
 		enum GxGGA_fieldPosEnum{IDENTIFIER_POS = 0, FIX_POS = 1, LATITUDE_POS = 2, LATITUDE_NS_POS = 3, LONGITUDE_POS = 4,
 							LONGITUDE_EW_POS = 5, FIX_QUALIFICATION_POS = 6, NB_SAT_POS = 7, DOP_POS = 8, ALTITUDE_POS = 9,
 							UNIT_ALTITUDE_POS = 10, HEIGHT_CORR_POS = 11, UNIT_HEIGHT_POS = 12};

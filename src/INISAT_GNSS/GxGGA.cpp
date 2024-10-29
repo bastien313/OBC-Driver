@@ -2,15 +2,22 @@
 #include "GxGGA.h"
 
 
+/// @brief Instantiates a new GxGGA_parser class
+///			Set all member to default value.
 GxGGA_parser::GxGGA_parser(){
 	clear();
 }
 
+/// @brief Instantiates a new GxGGA_parser class
+///		   Parse data from NMEA frame
+/// @param data C-string of NMEA frame
 GxGGA_parser::GxGGA_parser(char* data){
 	clear();
 	parse(data);
 }
 
+/// @brief Set all member to default value.
+/// @param  
 void GxGGA_parser::clear(void){
 	fieldPresenceNumber = 0;
 	fix = 0.0f;
@@ -29,7 +36,9 @@ void GxGGA_parser::clear(void){
 	}
 }
 
-
+/// @brief Parse NMEA frame
+/// @param frame C-string of NMEA frame
+/// @return True if frame is valid
 bool GxGGA_parser::parse(char* frame){
 	char field[16] = {0};
 	uint32_t carFieldId = 0;
@@ -63,9 +72,9 @@ bool GxGGA_parser::parse(char* frame){
 	return frameIsValid;
 }
 
-
-
-
+/// @brief Extract one field of NMEA frame
+/// @param field C-string of field
+/// @param fieldId id of field
 void GxGGA_parser::extractField(char *field, GxGGA_fieldPosEnum fieldId){
 	switch(fieldId){
 		case FIX_POS:
@@ -114,6 +123,8 @@ void GxGGA_parser::extractField(char *field, GxGGA_fieldPosEnum fieldId){
 	}
 }
 
+/// @brief Print all field, for debuging usage
+/// @param  
 void GxGGA_parser::debugPrint(void){
 	Serial.print("Fix = ");
 	Serial.println(fix);
