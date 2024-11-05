@@ -1,3 +1,5 @@
+/// @example OBC_Arduino_INISAT.ino
+
 #include <OBC_Arduino.h>
 #include <string.h>
 
@@ -17,7 +19,7 @@ void loop() {
     switch(command){
 
       case 'A': // A check
-        OBC.writeCom("AOBC check : OK@");
+        OBC.writeCom((char*)"AOBC check : OK@");
       break;
 
       case 'B': // B  (PARMETRES BATTERIES)
@@ -26,10 +28,10 @@ void loop() {
 
       case 'C': // C  (TEMPERATURE)
         OBC.BNO.get_temp();
-        OBC.writeCom("C");
+        OBC.writeCom((char*)"C");
         dtostrf(OBC.BNO.temperature, 7, 3, strFloat);
         OBC.writeCom(strFloat);
-        OBC.writeCom("@");
+        OBC.writeCom((char*)"@");
       break;
 
       case 'D': // D  (ALTITUDE)
@@ -86,11 +88,11 @@ void loop() {
 
 
       case 'V': //   V  (GESTION INTERNE)
-        OBC.writeCom("V2@");
+        OBC.writeCom((char*)"V2@");
       break;      
 
       case 'Z': // Z  FIN DE COMMUNICATION 
-        OBC.writeCom("Z");
+        OBC.writeCom((char*)"Z");
       break;     
     }
   }
@@ -100,35 +102,35 @@ void EPS_dataOut(void){
   char strFloat[20];
   OBC.EPS.get();
 
-  OBC.writeCom("B");
+  OBC.writeCom((char*)"B");
   dtostrf(OBC.EPS.vbat, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.EPS.vin, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.EPS.vout, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.EPS.ibat, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.EPS.iin, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.EPS.temperature, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.EPS.csd, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }
 
 void MLP_altitude(void){
@@ -137,10 +139,10 @@ void MLP_altitude(void){
   OBC.MPL.setModeAltimeter();
   OBC.MPL.readAltitude(&A);
 
-  OBC.writeCom("D");
+  OBC.writeCom((char*)"D");
   dtostrf(A.altitude(), 7, 3, strFloat);
   OBC.writeCom(strFloat);
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }
 
 void MLP_pression(void){
@@ -149,213 +151,213 @@ void MLP_pression(void){
   OBC.MPL.setModeBarometer();
   OBC.MPL.readPressure(&P);
 
-  OBC.writeCom("E");
+  OBC.writeCom((char*)"E");
   dtostrf(P.pressure(), 7, 3, strFloat);
   OBC.writeCom(strFloat);
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }
 
 void BNO_euler(void){
   char strFloat[20];
   OBC.BNO.get_angles(); 
 
-  OBC.writeCom("F");
+  OBC.writeCom((char*)"F");
   dtostrf(OBC.BNO.euler.roll, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.euler.pitch, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.euler.yaw, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }
 
 void  BNO_quaternion(void){
   char strFloat[20];
   OBC.BNO.get_quat();
 
-  OBC.writeCom("G");
+  OBC.writeCom((char*)"G");
   dtostrf(OBC.BNO.quat.w, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.quat.x, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.quat.y, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.quat.z, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }
 
 void BNO_angularSpeed(void){
   char strFloat[20];
   OBC.BNO.get_gyro();
 
-  OBC.writeCom("H");
+  OBC.writeCom((char*)"H");
   dtostrf(OBC.BNO.gyro.x, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.gyro.y, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.gyro.z, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }
 
 void BNO_accel(void){
   char strFloat[20];
   OBC.BNO.get_accel();
 
-  OBC.writeCom("I");
+  OBC.writeCom((char*)"I");
   dtostrf(OBC.BNO.accel.x, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.accel.y, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.accel.z, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }
 
 void BNO_mag(void){
   char strFloat[20];
   OBC.BNO.get_mag();
 
-  OBC.writeCom("J");
+  OBC.writeCom((char*)"J");
   dtostrf(OBC.BNO.mag.x, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.mag.y, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.mag.z, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }
 
 void BNO_lia(void){
   char strFloat[20];
   OBC.BNO.get_lia();
 
-  OBC.writeCom("K");
+  OBC.writeCom((char*)"K");
   dtostrf(OBC.BNO.lia.x, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.lia.y, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.lia.z, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }
 
 void BNO_gravity(void){
   char strFloat[20];
   OBC.BNO.get_grv();
 
-  OBC.writeCom("L");
+  OBC.writeCom((char*)"L");
   dtostrf(OBC.BNO.gravity.x, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.gravity.y, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.BNO.gravity.z, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }
 
 void solar(void){
   char strFloat[20];
-  OBC.writeCom("M");
+  OBC.writeCom((char*)"M");
   dtostrf(OBC.XP_readVolatge()*50.0f, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.XN_readVolatge()*50.0f, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.YP_readVolatge()*50.0f, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.YN_readVolatge()*50.0f, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(OBC.Z_readVolatge()*50.0f, 7, 3, strFloat);
   OBC.writeCom(strFloat);
 
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }
 
 void NMEA_bufferWrite(void){
   OBC.GNSS.fill_NMEA_buffer();
 
   if(strlen((char*)OBC.GNSS.NMEA_Buffer) == 0){
-    OBC.writeCom("QNo data@");
+    OBC.writeCom((char*)"QNo data@");
   }else{
-    OBC.writeCom("O");
+    OBC.writeCom((char*)"O");
     OBC.writeCom((char*)OBC.GNSS.NMEA_Buffer);
-    OBC.writeCom("@");
+    OBC.writeCom((char*)"@");
   }
 }
 
 
 void sendNMEAData(int hTime, int mTime, int sTime, float latitude, char ns, float longitude, char ew, int satNumber){
   char bufferOut[50];
-  OBC.writeCom("N");
+  OBC.writeCom((char*)"N");
 
   sprintf(bufferOut, "%02d:%02d:%02d", hTime, mTime, sTime);
   OBC.writeCom(bufferOut);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(latitude, 1, 3, bufferOut);
   OBC.writeCom(bufferOut);
   OBC.writeCom((char*)&ns,1);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   dtostrf(longitude, 1, 3, bufferOut);
   OBC.writeCom(bufferOut);
   OBC.writeCom((char*)&ew,1);
 
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   if(satNumber){
     sprintf(bufferOut, "%d",satNumber);
     OBC.writeCom(bufferOut);
   }else{
-    OBC.writeCom("/");
+    OBC.writeCom((char*)"/");
   }
 
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 
 }
 
@@ -364,7 +366,7 @@ void NEMA_dataWrite(void){
   OBC.GNSS.fill_NMEA_buffer();
 
   if(strlen((char*)OBC.GNSS.NMEA_Buffer) == 0){
-    OBC.writeCom("PNo data@");
+    OBC.writeCom((char*)"PNo data@");
     return;
   }
 
@@ -377,7 +379,7 @@ void NEMA_dataWrite(void){
     latitude = INISAT_GNSS::DecimalDegreesToGpsCoordinate(GGA.latitude, GGA.ns);
     longitude = INISAT_GNSS::DecimalDegreesToGpsCoordinate(GGA.longitude, GGA.ew);
     hTime = INISAT_GNSS::calcHour(GGA.fix);
-    mTime = INISAT_GNSS::calcMinut(GGA.fix);
+    mTime = INISAT_GNSS::calcMinute(GGA.fix);
     sTime = INISAT_GNSS::calcSecond(GGA.fix);
 
     //GGA.debugPrint();
@@ -390,10 +392,10 @@ void NEMA_dataWrite(void){
 
   GxGLL_parser GLL;
   if(OBC.GNSS.getGLLdata(&GLL, false)){
-    latitude = INISAT_GNSS::gpsToDecimalDegrees(GLL.latitude, GLL.ns);
-    longitude = INISAT_GNSS::gpsToDecimalDegrees(GLL.longitude, GLL.ew);
+    latitude = INISAT_GNSS::DecimalDegreesToGpsCoordinate(GLL.latitude, GLL.ns);
+    longitude = INISAT_GNSS::DecimalDegreesToGpsCoordinate(GLL.longitude, GLL.ew);
     hTime = INISAT_GNSS::calcHour(GLL.fix);
-    mTime = INISAT_GNSS::calcMinut(GLL.fix);
+    mTime = INISAT_GNSS::calcMinute(GLL.fix);
     sTime = INISAT_GNSS::calcSecond(GLL.fix);
 
     //GLL.debugPrint();
@@ -404,7 +406,7 @@ void NEMA_dataWrite(void){
     }
   }
   // No good data available
-  OBC.writeCom("PNo data@");
+  OBC.writeCom((char*)"PNo data@");
 }
 
 
@@ -412,41 +414,41 @@ void NEMA_dataWrite(void){
 void temperature(void){
   char strFloat[20];
   float voltage;
-  OBC.writeCom("R");
+  OBC.writeCom((char*)"R");
   voltage = OBC.thermistor_readVolatge(0);
   if(voltage < 0.3f || voltage > 5.1f){
-    OBC.writeCom("Deconnecté");
+    OBC.writeCom((char*)"Deconnecté");
   }else{
     dtostrf(OBC_Arduino::thermistor_voltageConversion(voltage), 7, 3, strFloat);
     OBC.writeCom(strFloat);
   }
   
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   voltage = OBC.thermistor_readVolatge(1);
   if(voltage < 0.3f || voltage > 5.1f){
-    OBC.writeCom("Deconnecté");
+    OBC.writeCom((char*)"Deconnecté");
   }else{
     dtostrf(OBC_Arduino::thermistor_voltageConversion(voltage), 7, 3, strFloat);
     OBC.writeCom(strFloat);
   }
   
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   voltage = OBC.thermistor_readVolatge(2);
   if(voltage < 0.3f || voltage > 5.1f){
-    OBC.writeCom("Deconnecté");
+    OBC.writeCom((char*)"Deconnecté");
   }else{
     dtostrf(OBC_Arduino::thermistor_voltageConversion(voltage), 7, 3, strFloat);
     OBC.writeCom(strFloat);
   }
   
-  OBC.writeCom("#");
+  OBC.writeCom((char*)"#");
   voltage = OBC.thermistor_readVolatge(3);
   if(voltage < 0.3f || voltage > 5.1f){
-    OBC.writeCom("Deconnecté");
+    OBC.writeCom((char*)"Deconnecté");
   }else{
     dtostrf(OBC_Arduino::thermistor_voltageConversion(voltage), 7, 3, strFloat);
     OBC.writeCom(strFloat);
   }
   
-  OBC.writeCom("@");
+  OBC.writeCom((char*)"@");
 }

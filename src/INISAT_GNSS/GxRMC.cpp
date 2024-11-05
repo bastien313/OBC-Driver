@@ -1,16 +1,22 @@
 #include "checksum.h"
 #include "GxRMC.h"
 
-
+/// @brief Instantiates a new GxRMC_parser class
+///			Set all member to default value.
 GxRMC_parser::GxRMC_parser(){
 	clear();
 }
 
+/// @brief Instantiates a new GxRMC_parser class
+///		   Parse data from NMEA frame
+/// @param data C-string of NMEA frame
 GxRMC_parser::GxRMC_parser(char* data){
 	clear();
 	parse(data);
 }
 
+/// @brief Set all member to default value.
+/// @param  
 void GxRMC_parser::clear(void){
 	fieldPresenceNumber = 0;
 	fix = 0.0f;
@@ -31,7 +37,9 @@ void GxRMC_parser::clear(void){
 	}
 }
 
-
+/// @brief Parse NMEA frame
+/// @param frame C-string of NMEA frame
+/// @return True if frame is valid
 bool GxRMC_parser::parse(char* frame){
 	char field[16] = {0};
 	uint32_t carFieldId = 0;
@@ -65,9 +73,9 @@ bool GxRMC_parser::parse(char* frame){
 	return frameIsValid;
 }
 
-
-
-
+/// @brief Extract one field of NMEA frame
+/// @param field C-string of field
+/// @param fieldId id of field
 void GxRMC_parser::extractField(char *field, GxRMC_fieldPosEnum fieldId){
 	switch(fieldId){
 		case FIX_POS:
@@ -119,6 +127,8 @@ void GxRMC_parser::extractField(char *field, GxRMC_fieldPosEnum fieldId){
 	}
 }
 
+/// @brief Print all field, for debuging usage
+/// @param  
 void GxRMC_parser::debugPrint(void){
 	Serial.print("Fix = ");
 	Serial.println(fix);

@@ -1,0 +1,38 @@
+var class_gx_g_g_a__parser =
+[
+    [ "GxGGA_fieldPosEnum", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4ea", [
+      [ "IDENTIFIER_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaab3d2eec2b1c9fe3b9e72c3b3215d93a4", null ],
+      [ "FIX_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaabaabf2a5d5d941ea768369beb62bf463", null ],
+      [ "LATITUDE_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaaf17217f9231cb030d8d466a72f0f797a", null ],
+      [ "LATITUDE_NS_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaa50f6cba68b87dea3d1e881d3fa90b874", null ],
+      [ "LONGITUDE_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaaa54b8280b62bc5de087f5c8e52e7f187", null ],
+      [ "LONGITUDE_EW_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaa20e682f9a5089b909704f8bb45695a08", null ],
+      [ "FIX_QUALIFICATION_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaad8bb13a6240b28f3ad9706e794139d7c", null ],
+      [ "NB_SAT_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaa636a37d745bde49cdf6e89f1133e0344", null ],
+      [ "DOP_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaa71ec7d14692e1de01749f472f1618043", null ],
+      [ "ALTITUDE_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaa1497c5c48f008ab41e4b1cdcc8342763", null ],
+      [ "UNIT_ALTITUDE_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaa9fa70504d54ba0049592173949105c14", null ],
+      [ "HEIGHT_CORR_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaa8dd917e6ee168aecfbfc6278fc24ab56", null ],
+      [ "UNIT_HEIGHT_POS", "class_gx_g_g_a__parser.html#abcb240ba3c52729ddf5ec0f549cff4eaa270dcc1cae6e4ffba52e228516118a38", null ]
+    ] ],
+    [ "GxGGA_parser", "class_gx_g_g_a__parser.html#acdd964e9bec24687b98a0d4333681a64", null ],
+    [ "GxGGA_parser", "class_gx_g_g_a__parser.html#a57c2ab0dbe7751f140bf3982a94fcb63", null ],
+    [ "clear", "class_gx_g_g_a__parser.html#afa50823fa9a6288651c7b26237075228", null ],
+    [ "debugPrint", "class_gx_g_g_a__parser.html#ac8593ae1f4830258b7f211dea085ff32", null ],
+    [ "extractField", "class_gx_g_g_a__parser.html#a2857539e2b25190910ad416c6f42069e", null ],
+    [ "filedIsPresent", "class_gx_g_g_a__parser.html#a1c7868596c2e01826ffe3e8627d04dca", null ],
+    [ "parse", "class_gx_g_g_a__parser.html#a5f0d7fb36413a3d5440ca59c543a7685", null ],
+    [ "altitude", "class_gx_g_g_a__parser.html#a1e51a05e398730c3994bdcae4af09769", null ],
+    [ "dop", "class_gx_g_g_a__parser.html#a01b5c80f9603c2f4ea68f06cbc88ac0c", null ],
+    [ "ew", "class_gx_g_g_a__parser.html#a3f2ff6913a2bf2032fc2c5ec3fb16332", null ],
+    [ "fieldPresence", "class_gx_g_g_a__parser.html#a306390872f92b026c1891bde61258712", null ],
+    [ "fieldPresenceNumber", "class_gx_g_g_a__parser.html#a41304b4112ecb071fd6a301284b66121", null ],
+    [ "fix", "class_gx_g_g_a__parser.html#acade4c3d9992f2971f25940b581ecd4f", null ],
+    [ "fixQualification", "class_gx_g_g_a__parser.html#a41b09a5557b9d524d162eb4e61573001", null ],
+    [ "frameIsValid", "class_gx_g_g_a__parser.html#a8fd5222e4ed4fe52d6e27c47a61a209c", null ],
+    [ "heightCorrection", "class_gx_g_g_a__parser.html#a5f11d03f8b5f38277a679853a0060e42", null ],
+    [ "latitude", "class_gx_g_g_a__parser.html#a6626093a564225a3d7335055d8eaec94", null ],
+    [ "longitude", "class_gx_g_g_a__parser.html#a987eb3ac6a6290f0fb830c3b2f475619", null ],
+    [ "ns", "class_gx_g_g_a__parser.html#a7776c5784d88b3af6938ed5b9be4ebea", null ],
+    [ "satNumber", "class_gx_g_g_a__parser.html#a567006f8b06bf867074e32f29377ab24", null ]
+];

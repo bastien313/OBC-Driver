@@ -1,3 +1,4 @@
+/// @example BNO055.ino
 #include <OBC_Arduino.h>
 #include <string.h>
 

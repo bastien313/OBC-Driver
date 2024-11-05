@@ -12,6 +12,7 @@ typedef struct {
 	bool dataIsPresent;
 }GSV_SV;
 
+/// @brief GSV frame parser class.
 class GxGSV_parser
 {
 	

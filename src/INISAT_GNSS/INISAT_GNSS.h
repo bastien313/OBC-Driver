@@ -30,8 +30,8 @@ public:
 	uint32_t getRMCdata(GxRMC_parser *outputParser, bool readEnable=true, uint32_t timeOutMs = 1100);
 
 	static int calcHour(float fix);
-	static int calcMinut (float fix);
-	static int calcSecond (float fix);
+	static int calcMinute(float fix);
+	static int calcSecond(float fix);
 	static float DecimalDegreesToGpsCoordinate (float decimalCoord, char quadrant);
 	
 	uint8_t NMEA_Buffer[DATA_BUFFER_SIZE];

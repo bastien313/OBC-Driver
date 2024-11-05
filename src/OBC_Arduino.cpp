@@ -42,6 +42,7 @@ void OBC_Arduino::begin(TwoWire* i2cInterface, UART* serial){
 	
 	//GPS
 	GNSS.begin(i2cInterface);
+	// Enable all NMEA frame.
 	GNSS.setNMEAoutputChannel((uint8_t*)"GGA", INISAT_GNSS::DDC);
 	GNSS.setNMEAoutputChannel((uint8_t*)"GLL", INISAT_GNSS::DDC);
 	GNSS.setNMEAoutputChannel((uint8_t*)"RMC", INISAT_GNSS::DDC);

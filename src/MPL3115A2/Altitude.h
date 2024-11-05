@@ -31,7 +31,6 @@ public:
     enum unitsType { METERS, FEET };
  
     Altitude();
-    Altitude(float a, unitsType units = METERS);
     Altitude(const char* compressed);
     Altitude(const char msb, const char csb, const char lsb);
  

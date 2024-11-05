@@ -1,0 +1,38 @@
+var class_gx_r_m_c__parser =
+[
+    [ "GxRMC_fieldPosEnum", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6", [
+      [ "IDENTIFIER_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6a674064fbec052ce2ac2bd88998437ef5", null ],
+      [ "FIX_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6a1d90e489a271dc3bb5657284167de9eb", null ],
+      [ "ALERT_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6ae308b9dda18bfa1d3cee6b42bc052f0e", null ],
+      [ "LATITUDE_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6a8191adbc0f99ec217813c2877965bdc5", null ],
+      [ "LATITUDE_NS_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6a90a43893ed62ca7c3a491534f4041203", null ],
+      [ "LONGITUDE_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6a5f76c1801c71fd1c68db9d69cbc21317", null ],
+      [ "LONGITUDE_EW_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6a8d9d043e7783a38b5e573f3448bde023", null ],
+      [ "SPEED_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6a330a0a0065d5cb3fb9525a2de0d3061a", null ],
+      [ "CAP_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6ad1c7046c600b58ff2f7ffb9248132c6f", null ],
+      [ "date_FIX_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6a14fdcd97dd96683d50c0735c88a24887", null ],
+      [ "MAGNETIC_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6a20d5bb355f19d5b18638606999a2ca79", null ],
+      [ "MAGNETIC_EW_POS", "class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6a3038dbaa7af1c2c3ac664b4e6a785f42", null ]
+    ] ],
+    [ "GxRMC_parser", "class_gx_r_m_c__parser.html#a891367ed1ed2b7495d4893d80a576005", null ],
+    [ "GxRMC_parser", "class_gx_r_m_c__parser.html#ace48ba5287b190f7692cea38a01f6ff9", null ],
+    [ "clear", "class_gx_r_m_c__parser.html#a24e3bc1cb5db3c8a5c0634e84ed11e42", null ],
+    [ "debugPrint", "class_gx_r_m_c__parser.html#af6fce51c3fa7fedd27884670c17508e2", null ],
+    [ "extractField", "class_gx_r_m_c__parser.html#a8a0198e6ba598e63f182a8dd7617bfe4", null ],
+    [ "filedIsPresent", "class_gx_r_m_c__parser.html#af236abd7221cf423da3cba291e37cb03", null ],
+    [ "parse", "class_gx_r_m_c__parser.html#a481c213e37b21758b2ebab8fe29d4ec8", null ],
+    [ "alert", "class_gx_r_m_c__parser.html#a014bdffd391f639f97cbb47c14bfad92", null ],
+    [ "cap", "class_gx_r_m_c__parser.html#af481fb78e31eab4e3a221e5cf59fc794", null ],
+    [ "dateFix", "class_gx_r_m_c__parser.html#a84cf6743f67b7dadbc4fc6b0567b83b8", null ],
+    [ "ew", "class_gx_r_m_c__parser.html#ad966359feb737631c611bef07b8e58ae", null ],
+    [ "fieldPresence", "class_gx_r_m_c__parser.html#af56f2fe61b5f4fee291f58b286332835", null ],
+    [ "fieldPresenceNumber", "class_gx_r_m_c__parser.html#abd4b4b94d374203227436c75cc73d529", null ],
+    [ "fix", "class_gx_r_m_c__parser.html#a8b7e2d91469b3fee3b295f75b0fa0420", null ],
+    [ "frameIsValid", "class_gx_r_m_c__parser.html#a82edd838840f56ac99c6254ce0e79754", null ],
+    [ "latitude", "class_gx_r_m_c__parser.html#af5a9408b4de34569587870e127c713fe", null ],
+    [ "longitude", "class_gx_r_m_c__parser.html#aed580f8da8887e6d98e5148a9e7ada90", null ],
+    [ "magnetic", "class_gx_r_m_c__parser.html#aa897c1118e3b48918127e2867f92bc3d", null ],
+    [ "magneticEw", "class_gx_r_m_c__parser.html#a73bbf7b3c1f50245d7426907447bdb81", null ],
+    [ "ns", "class_gx_r_m_c__parser.html#a9a948fa513dae9cdc8cbc45ed479bf5f", null ],
+    [ "speed", "class_gx_r_m_c__parser.html#a11c2042bbe954be974daa62049081c18", null ]
+];

@@ -2,15 +2,22 @@
 #include "GxGSA.h"
 
 
+/// @brief Instantiates a new GxGSA_parser class
+///			Set all member to default value.
 GxGSA_parser::GxGSA_parser(){
 	clear();
 }
 
+/// @brief Instantiates a new GxGSA_parser class
+///		   Parse data from NMEA frame
+/// @param data C-string of NMEA frame
 GxGSA_parser::GxGSA_parser(char* data){
 	clear();
 	parse(data);
 }
 
+/// @brief Set all member to default value.
+/// @param  
 void GxGSA_parser::clear(void){
 	fieldPresenceNumber = 0;
 	mode = 'X';
@@ -31,7 +38,9 @@ void GxGSA_parser::clear(void){
 	}
 }
 
-
+/// @brief Parse NMEA frame
+/// @param frame C-string of NMEA frame
+/// @return True if frame is valid
 bool GxGSA_parser::parse(char* frame){
 	char field[16] = {0};
 	uint32_t carFieldId = 0;
@@ -66,8 +75,9 @@ bool GxGSA_parser::parse(char* frame){
 }
 
 
-
-
+/// @brief Extract one field of NMEA frame
+/// @param field C-string of field
+/// @param fieldId id of field
 void GxGSA_parser::extractField(char *field, GxGSA_fieldPosEnum fieldId){
 
 	if((int)fieldId > (int)PRN_ID_POS  && (int)fieldId < (int)PDOP_POS){
@@ -102,6 +112,8 @@ void GxGSA_parser::extractField(char *field, GxGSA_fieldPosEnum fieldId){
 	}
 }
 
+/// @brief Print all field, for debuging usage
+/// @param  
 void GxGSA_parser::debugPrint(void){
 	Serial.print("mode = ");
 	Serial.println(mode);

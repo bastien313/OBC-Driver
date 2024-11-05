@@ -50,7 +50,7 @@ class OBC_Arduino
 		BNO055 BNO;
 		MPL3115A2 MPL;
 		INISAT_GNSS GNSS;
-		SDFileSystemClass SDCARD; //Standard Arduino SD library, see https://www.arduino.cc/reference/en/libraries/sd/
+		SDFileSystemClass SD; //Standard Arduino SD library, see https://www.arduino.cc/reference/en/libraries/sd/
 		
 	private:
 		//Local ADC included on board.

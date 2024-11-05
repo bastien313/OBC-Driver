@@ -4,9 +4,10 @@
 
 #define RMC_FIELD_NUMBER (16)
 
+
+/// @brief RMC rame parser class.
 class GxRMC_parser
 {
-
 	public:
 	
 		enum GxRMC_fieldPosEnum{IDENTIFIER_POS = 0, FIX_POS = 1, ALERT_POS = 2,

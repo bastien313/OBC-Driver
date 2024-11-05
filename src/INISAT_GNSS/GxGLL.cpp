@@ -3,16 +3,22 @@
 
 
 
-
+/// @brief Instantiates a new GxGLL_parser class
+///			Set all member to default value.
 GxGLL_parser::GxGLL_parser(){
 	clear();
 }
 
+/// @brief Instantiates a new GxGLL_parser class
+///		   Parse data from NMEA frame
+/// @param data C-string of NMEA frame
 GxGLL_parser::GxGLL_parser(char* data){
 	clear();
 	parse(data);
 }
 
+/// @brief Set all member to default value.
+/// @param  
 void GxGLL_parser::clear(void){
 	fieldPresenceNumber = 0;
 	latitude = 0.0f;
@@ -28,9 +34,11 @@ void GxGLL_parser::clear(void){
 	}
 }
 
-
+/// @brief Parse NMEA frame
+/// @param frame C-string of NMEA frame
+/// @return True if frame is valid
 bool GxGLL_parser::parse(char* frame){
-	char field[16] = {0};
+	char field[32] = {0};
 	uint32_t carFieldId = 0;
 	uint32_t carFrameId = 0;
 	uint32_t fieldId = 0;
@@ -39,7 +47,7 @@ bool GxGLL_parser::parse(char* frame){
 	if(!frameIsValid){
 		return frameIsValid;
 	}
-	
+
 	while(frame[carFrameId]){
 		field[carFieldId] = frame[carFrameId];
 		if(field[carFieldId] == ',' || field[carFieldId] == '\r'|| field[carFieldId] == '\n' || field[carFieldId] == '*'){
@@ -49,22 +57,23 @@ bool GxGLL_parser::parse(char* frame){
 				extractField(field, (GxGLL_fieldPosEnum)fieldId);
 				fieldPresence[fieldId] = true;
 			}
-			
 			carFieldId = 0;
 			field[carFieldId] = 0;
 			fieldId++;
+
 		}else{
 			carFieldId++;
 		}
 		carFrameId++;
 	}
-
 	return frameIsValid;
 }
 
 
 
-
+/// @brief Extract one field of NMEA frame
+/// @param field C-string of field
+/// @param fieldId id of field
 void GxGLL_parser::extractField(char *field, GxGLL_fieldPosEnum fieldId){
 	switch(fieldId){
 		case FIX_POS:
@@ -103,6 +112,8 @@ void GxGLL_parser::extractField(char *field, GxGLL_fieldPosEnum fieldId){
 	}
 }
 
+/// @brief Print all field, for debuging usage
+/// @param  
 void GxGLL_parser::debugPrint(void){
 	Serial.print("Fix = ");
 	Serial.println(fix);

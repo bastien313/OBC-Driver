@@ -27,7 +27,6 @@ public:
     enum unitsType { CELSIUS, FAHRENHEIT, KELVIN };
  
     Temperature();
-    Temperature(float a, unitsType units = FAHRENHEIT);
     Temperature(const char* compressed);
     Temperature(const char msb, const char lsb);
  

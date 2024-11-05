@@ -281,7 +281,7 @@ uint32_t INISAT_GNSS::getExtractedData(T *outputParser, frameFormat filter,  boo
 			if(strstr(parse_data, filterStr)){
 				frameNb++;
 				T parser(parse_data);
-				if(parser.fieldPresenceNumber > score){
+				if(parser.fieldPresenceNumber > score && parser.frameIsValid){
 					score = parser.fieldPresenceNumber;
 					outputParser->parse(parse_data);
 				}
@@ -298,21 +298,21 @@ uint32_t INISAT_GNSS::getExtractedData(T *outputParser, frameFormat filter,  boo
 /// @brief Compute hour from fix
 /// @param fix fix value
 /// @return Hour
-int INISAT_GNSS::calcHour (float fix){
+int INISAT_GNSS::calcHour(float fix){
 	return int(fix) / 10000;
 }
 
 /// @brief Compute minute from fix
 /// @param fix fix value
 /// @return Minute
-int INISAT_GNSS::calcMinute (float fix){
+int INISAT_GNSS::calcMinute(float fix){
 	return (int(fix) % 10000) / 100;
 }
 
 /// @brief Compute second from fix
 /// @param fix fix value
 /// @return Second
-int INISAT_GNSS::calcSecond (float fix){
+int INISAT_GNSS::calcSecond(float fix){
 	return int(fix) % 100;
 }
 

@@ -27,7 +27,6 @@ public:
     enum unitsType { PASCALS, PSI, INHG, MMHG };
  
     Pressure();
-    Pressure(float a, unitsType units = PASCALS);
     Pressure(const char* compressed);
     Pressure(const char msb, const char csb, const char lsb);
  

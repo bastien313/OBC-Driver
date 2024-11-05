@@ -2,12 +2,11 @@
 #define GxGLL_H_
 #include <Arduino.h> 
 
-#define GLL_FIELD_NUMBER (8)
+#define GLL_FIELD_NUMBER (16)
 
+/// @brief GLL frame parser class.
 class GxGLL_parser
-{
-
-							
+{					
 	public:
 	
 		enum GxGLL_fieldPosEnum{IDENTIFIER_POS = 0, LATITUDE_POS = 1, LATITUDE_NS_POS = 2, LONGITUDE_POS = 3,

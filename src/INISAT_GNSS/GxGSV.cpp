@@ -1,16 +1,22 @@
 #include "checksum.h"
 #include "GxGSV.h"
 
-
+/// @brief Instantiates a new GxGSV_parser class
+///			Set all member to default value.
 GxGSV_parser::GxGSV_parser(){
 	clear();
 }
 
+/// @brief Instantiates a new GxGSV_parser class
+///		   Parse data from NMEA frame
+/// @param data C-string of NMEA frame
 GxGSV_parser::GxGSV_parser(char* data){
 	clear();
 	parse(data);
 }
 
+/// @brief Set all member to default value.
+/// @param  
 void GxGSV_parser::clear(void){
 	fieldPresenceNumber = 0;
 	totalMessage = 0;
@@ -31,7 +37,9 @@ void GxGSV_parser::clear(void){
 	}
 }
 
-
+/// @brief Parse NMEA frame
+/// @param frame C-string of NMEA frame
+/// @return True if frame is valid
 bool GxGSV_parser::parse(char* frame){
 	char field[16] = {0};
 	uint32_t carFieldId = 0;
@@ -68,9 +76,9 @@ bool GxGSV_parser::parse(char* frame){
 	return frameIsValid;
 }
 
-
-
-
+/// @brief Extract one field of NMEA frame
+/// @param field C-string of field
+/// @param fieldId id of field
 void GxGSV_parser::extractField(char *field, GxGSV_fieldPosEnum fieldId){
 
 	if((int)fieldId > (int)SV_VISIBLE_POS  && (int)fieldId < (int)CHECKSUM_POS){
@@ -123,6 +131,8 @@ void GxGSV_parser::extractField(char *field, GxGSV_fieldPosEnum fieldId){
 	}
 }
 
+/// @brief Print all field, for debuging usage
+/// @param  
 void GxGSV_parser::debugPrint(void){
 	Serial.print("Total message = ");
 	Serial.println(totalMessage);

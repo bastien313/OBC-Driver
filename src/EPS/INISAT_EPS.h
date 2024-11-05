@@ -13,6 +13,7 @@
 /// @brief Class for operating Battery charger device (LTC4162)
 /// The standard usage is to call the get() function and read all the received data using the member 
 /// vbat, vin, vout, ibat, iin, die_temp, temperature;
+class INISAT_EPS 
 { 
 public:
     INISAT_EPS();

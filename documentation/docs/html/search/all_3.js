@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['calcchecksum_0',['calcChecksum',['../checksum_8cpp.html#ad02e82fc270093e242b329dbe2fe5341',1,'checksum.cpp']]],
+  ['calchour_1',['calcHour',['../class_i_n_i_s_a_t___g_n_s_s.html#a9e9e92b4a7aae6fcd68e7a84af82bd69',1,'INISAT_GNSS']]],
+  ['calcminute_2',['calcMinute',['../class_i_n_i_s_a_t___g_n_s_s.html#a5765f93f7b8b09e557e71bfec5a20fde',1,'INISAT_GNSS']]],
+  ['calcsecond_3',['calcSecond',['../class_i_n_i_s_a_t___g_n_s_s.html#a1fd02908741de46bab02f94344ebdc54',1,'INISAT_GNSS']]],
+  ['calib_4',['calib',['../class_b_n_o055.html#a58b5aa121abf6b24b6530efb41e5810d',1,'BNO055']]],
+  ['calibration_5',['calibration',['../class_b_n_o055.html#a4bae9aea07a0a7fc6e97638e7d571d64',1,'BNO055']]],
+  ['cap_6',['cap',['../class_gx_r_m_c__parser.html#af481fb78e31eab4e3a221e5cf59fc794',1,'GxRMC_parser']]],
+  ['cap_5fpos_7',['CAP_POS',['../class_gx_r_m_c__parser.html#a802a4d1388a2aa2edea8bda278d7cba6ad1c7046c600b58ff2f7ffb9248132c6f',1,'GxRMC_parser']]],
+  ['cell_5fcount_8',['CELL_COUNT',['../_i_n_i_s_a_t___e_p_s_8h.html#a43704e2daafe2072a51a8962546758fc',1,'INISAT_EPS.h']]],
+  ['celsius_9',['CELSIUS',['../class_temperature.html#a4a51eef8d096d9295f91a1ad58e6196ba9a793cdcedd10e28685140b0b3e48126',1,'Temperature']]],
+  ['centigrade_10',['CENTIGRADE',['../_b_n_o055_8h.html#a3184a0dc0d374d9738815e84a033e65c',1,'BNO055.h']]],
+  ['check_11',['check',['../class_b_n_o055.html#a9aebd34cecd4cda22c74a94d7807a717',1,'BNO055']]],
+  ['checksum_2ecpp_12',['checksum.cpp',['../checksum_8cpp.html',1,'']]],
+  ['checksum_2eh_13',['checksum.h',['../checksum_8h.html',1,'']]],
+  ['checksum_5fpos_14',['CHECKSUM_POS',['../class_gx_g_s_v__parser.html#a98a81e978ae6e8ba783f00dff2503c68afc9272ff8e9ee8f3f1007a2191f86719',1,'GxGSV_parser']]],
+  ['chip_15',['chip',['../structchip.html',1,'chip'],['../_b_n_o055_8h.html#a0c2a702744a07507dc6b10fcf746a041',1,'chip():&#160;BNO055.h']]],
+  ['chipselect_16',['chipSelect',['../_s_d___c_a_r_d_8ino.html#a266db0f4dbdfbc06ea34c96f66bebed3',1,'SD_CARD.ino']]],
+  ['clear_17',['clear',['../class_gx_g_g_a__parser.html#afa50823fa9a6288651c7b26237075228',1,'GxGGA_parser::clear()'],['../class_gx_g_l_l__parser.html#a9ea4ce9009b881c83b1f5ceab74256ff',1,'GxGLL_parser::clear()'],['../class_gx_g_s_a__parser.html#a58c2718e3f2558fa17326f6ce44c13a5',1,'GxGSA_parser::clear()'],['../class_gx_g_s_v__parser.html#aafa9594d5b33c6a9d4cc2fd14499f762',1,'GxGSV_parser::clear()'],['../class_gx_r_m_c__parser.html#a24e3bc1cb5db3c8a5c0634e84ed11e42',1,'GxRMC_parser::clear()']]],
+  ['conversionongoing_18',['conversionOnGoing',['../class_a_d_s1015.html#ab02cca70d410dabc999956de506a1000',1,'ADS1015']]],
+  ['csd_19',['csd',['../class_i_n_i_s_a_t___e_p_s.html#ada14bd1ede4a787f05d72a564163536d',1,'INISAT_EPS']]],
+  ['ctrl_5freg1_20',['CTRL_REG1',['../_m_p_l3115_a2_8h.html#abd83ea49367ca7850ffc9091890aa46b',1,'MPL3115A2.h']]],
+  ['ctrl_5freg2_21',['CTRL_REG2',['../_m_p_l3115_a2_8h.html#afd5ce55297b11bfc3c750a359b80de46',1,'MPL3115A2.h']]],
+  ['ctrl_5freg3_22',['CTRL_REG3',['../_m_p_l3115_a2_8h.html#acdb673970b82f2380da68c9e8d1dc5c6',1,'MPL3115A2.h']]],
+  ['ctrl_5freg4_23',['CTRL_REG4',['../_m_p_l3115_a2_8h.html#a36c532b0a660c101907dcad7ee399fbd',1,'MPL3115A2.h']]],
+  ['ctrl_5freg5_24',['CTRL_REG5',['../_m_p_l3115_a2_8h.html#a97cbbf0a1e80e40544629e925e5a9026',1,'MPL3115A2.h']]]
+];

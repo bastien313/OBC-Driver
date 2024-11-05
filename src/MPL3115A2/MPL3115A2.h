@@ -104,100 +104,49 @@
 class MPL3115A2
 {
 public:
-    //! Constructs an MPL3115A2 object and associates an I2C and optional Serial debug object.
-    //! @param *i2c The I2C object to use for the sensor.
-    //! @param *pc An optional serial debug connection object.
     MPL3115A2();
 	void begin(TwoWire *i2c);
-    //! Initializes the sensor, defaulting to Altitude mode. This should be called before using
-    //! the sensor for the first time.
-    void init();
+
+    void init(void);
  
-    //! Queries the value from the WHO_AM_I register (usually equal to 0xC4).
-    //! @return The fixed device ID from the sensor.
-    char  whoAmI() { return i2cRead(WHO_AM_I); } 
+    char  whoAmI(void);
     
-    //! Reads Altitude data from the sensor and returns it in the Altitude object passed in. If
-    //! no data could be read, the Altitude object is left as is.
-    //! @param a A pointer to an Altitude object that will receive the sensor data.
-    //! @returns The Altitude pointer that was passed in.
-    Altitude* readAltitude(Altitude* a);            
-    //! Reads Pressure data from the sensor and returns it in the Pressure object passed in. If
-    //! no data could be read, the Pressure object is left as is.
-    //! @param a A pointer to a Pressure object that will receive the sensor data.
-    //! @returns The Pressure pointer that was passed in.
-    Pressure* readPressure(Pressure* p);            
-    //! Reads Temperature data from the sensor and returns it in the Temperature object passed in. If
-    //! no data could be read, the Temperature object is left as is.
-    //! @param a A pointer to an Temperature object that will receive the sensor data.
-    //! @returns The Temperature pointer that was passed in.
-    Temperature* readTemperature(Temperature* t);
+    void readAltitude(Altitude* a);            
+    void readPressure(Pressure* p);            
+    void readTemperature(Temperature* t);
     
-    // Use these methods to set the sensor's offsets to increase its accuracy. You can generally
-    // find your current altitude with a smart phone or GPS. Same goes for the temperature. For
-    // the current pressure where you are, you may need an accurate weather station. Getting the
-    // pressure from the web for your area is generally not close enough to help with calibration.
-    // You may need to play with the setting to achieve good accuracy. I found the offset steps
-    // were not 100% accurate to the datasheet and had to adjust accordingly. 
-    
-    //! Returns the altitude offset stored in the sensor.
-    char offsetAltitude() { return i2cRead(OFF_H); }
-    //! Sets the altitude offset stored in the sensor. The allowed offset range is from -128 to 127 meters.
-    void setOffsetAltitude(const char offset) { i2cWrite(OFF_H, offset); } 
-    //! Returns the pressure offset stored in the sensor.
-    char offsetPressure() { return i2cRead(OFF_P); }
-    //! Sets the pressure offset stored in the sensor. The allowed offset range is from -128 to 127 where each LSB represents 4 Pa.
-    void setOffsetPressure(const char offset) { i2cWrite(OFF_P, offset); }
-    //! Returns the temperature offset stored in the sensor.
-    char offsetTemperature() { return i2cRead(OFF_T); }
-    //! Sets the temperature offset stored in the sensor. The allowed offset range is from -128 to 127 where each LSB represents 0.0625ยบC.
-    void setOffsetTemperature(const char offset) { i2cWrite(OFF_T, offset); } 
-    
-    //! Puts the sensor into Standby mode. Required when using methods below.
-    void  setModeStandby(); 
-    //! Activates the sensor to start taking measurements.
-    void  setModeActive();  
-    
-    //! Puts the sensor into barometric mode, be sure to put the sensor in standby mode first.
-    void  setModeBarometer();           
-    //! Puts the sensor into altimeter mode, be sure to put the sensor in standby mode first.
-    void  setModeAltimeter();           
-    //! Sets the number of samples from 1 to 128, be sure to put the sensor in standby mode first.
+    /// Use these methods to set the sensor's offsets to increase its accuracy. You can generally
+    /// find your current altitude with a smart phone or GPS. Same goes for the temperature. For
+    /// the current pressure where you are, you may need an accurate weather station. Getting the
+    /// pressure from the web for your area is generally not close enough to help with calibration.
+    /// You may need to play with the setting to achieve good accuracy. I found the offset steps
+    /// were not 100% accurate to the datasheet and had to adjust accordingly. 
+    void setOffsetTemperature(const char offset);
+    void setOffsetPressure(const char offset);
+    void setOffsetAltitude(const char offset);
+    char offsetTemperature(void);
+    char offsetPressure(void);
+    char offsetAltitude(void);
+
+    void  setModeStandby(void); 
+    void  setModeActive(void);  
+    void  setModeBarometer(void);           
+    void  setModeAltimeter(void);           
     void  setOversampleRate(char rate); 
-    //! Sets all the event flags, be sure to put the sensor in standby mode first.
-    void  enableEventFlags();           
+    void  enableEventFlags(void);           
  
 private:
-    //! The I2C object we use to communicate with the sensor. It is not part
-    //! of the class so that it can be shared with other peripherals on the 
-    //! bus.
     TwoWire *m_i2c;          
-                           
- 
- 
-    //! This helper function is used to CLEAR bits. The mask should contain 1s in the position
-    //! where the bits need to be cleared. One or more bits can be cleared this way.
     void clearRegisterBit(const char regAddr, const char bitMask);
-    //! This helper function is used to SET bits. The mask should contain 1s in the position
-    //! where the bits need to be set. One or more bits can be set this way.
+
     void setRegisterBit(const char regAddr, const char bitMask);
- 
-    //! Helper functions to check if data is ready in a register for either temperature or pressure.
-    //! The mask passed in determines which register bit to look at.
     int dataReady(const char mask);
-    //! Blocks for about 1/2 a second while checking the data ready bit. Returns 0 on sucees.
-    //! This function works for both altitude and barometric pressure depending on the mode the sensor is in.
-    int pressureDataReady() { return dataReady(0x04); }
-    //! Blocks for about 1/2 a second while checking the data ready bit. Returns 0 on sucees.
-    int temperatureDataReady() { return dataReady(0x02); }
- 
-    //! Called to force the sensor to take another sample
-    void toggleOneShot();                       
+    int pressureDataReady(void);
+    int temperatureDataReady(void);
+    void toggleOneShot(void);                       
     
-    //! Helper functions to read one value from the I2C bus using the sensor's address.
     char i2cRead(char regAddr);
 	void i2cRead(char regAddr, char *buffer, unsigned int size);
-    //! Helper functions to write one value from the I2C bus using the sensor's address.
     void i2cWrite(char regAddr, char value);
 };
  
